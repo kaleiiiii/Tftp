@@ -41,8 +41,8 @@ On another machine's terminal, enter:
 And the output should look something like:
 ```
 Welcome, TftpClient!
-	File Requested: cat.txt
-	Download location: client/cat.txt
+File Requested: cat.txt
+Download location: client/cat.txt
 Waiting for download...
 ```
 
