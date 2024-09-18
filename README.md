@@ -12,14 +12,14 @@ Firstly, the server must have a local directory containing a file to request.
 This folder must be located in the same directory that the class files are in.
 
 For example:
-``	.
-	├── TftpClient.class
-	├── TftpServer.class
-	├── TftpWorker.class
-	└── server
-	    ├── README.md
-	    └── cat.txt
-``
+```	.
+├── TftpClient.class
+├── TftpServer.class
+├── TftpWorker.class
+└── server
+    ├── README.md
+    └── cat.txt
+```
 #### Server Side
 In a terminal, enter:
 `$ java TftpServer`
@@ -44,6 +44,6 @@ Waiting for download...
 ``
 
 ## Notes
-
+...
 
 
