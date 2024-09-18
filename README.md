@@ -22,26 +22,29 @@ For example:
 ```
 #### Server Side
 In a terminal, enter:
+
 `$ java TftpServer`
 
 And the output should look something like:
-`` 
+
+``` 
 Welcome to local TftpServer!
 For the remote client, enter something like:
 $ java TftpClient 127.0.0.1 cat.txt 
-``
+```
 
 #### Client Side
 On another machine's terminal, enter:
+
 `java TftpClient <Server IP> <File Name>`
 
 And the output should look something like:
-`` 
+```
 Welcome, TftpClient!
 	File Requested: cat.txt
 	Download location: client/cat.txt
 Waiting for download...
-``
+```
 
 ## Notes
 ...
