@@ -156,12 +156,16 @@ public class TftpClient extends Thread {
             DatagramPacket pkt = new DatagramPacket(new byte[Tftp.BUFFER], Tftp.BUFFER);
 
             int block = 0;
-            int next = block + 1;
 
             while (true) {
 
             	socket.setSoTimeout(Tftp.WAIT); /* Waits until timeout limit */
             	socket.receive(pkt); 			/* Receives a packet of data */
+
+            	if (pkt.getLength() == 0) {
+            		System.out.println("\r\nTotal " + block + " packets received.\r\n");
+            		return true;
+            	}
 
             	InetAddress addr = pkt.getAddress();
             	int port = pkt.getPort();
@@ -182,7 +186,7 @@ public class TftpClient extends Thread {
             	 */
             	if (type == Tftp.DATA) {
             		/* Calculates expected next based on the previous block */
-            		next = block + 1;
+            		int next = block + 1;
             		System.out.print("\t\rDownloaded " + next  + " packets...\r");
 
             		/* Get the next block number after attempting to process */
@@ -192,10 +196,6 @@ public class TftpClient extends Thread {
 	                socket.send(Tftp.ackPacket(block, addr, port));
 
 	                Thread.sleep(Tftp.PAUSE); /* Pause to view the output */
-
-            	} else if (type == Tftp.ACK) {
-            		System.out.println("\r\nTotal " + block + " packets received!\r\n");
-            		return true;
 
             	} else if (type == Tftp.ERROR) {
             		System.out.println("From TftpServer: " + Tftp.getString(data));

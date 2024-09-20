@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 
 
 /**
@@ -20,6 +21,8 @@ import java.io.IOException;
  * @see 	TftpClient
  */
 public class TftpServer extends Thread {
+
+	private static volatile boolean running = true;
 
     private final InetAddress addr;
     private final Path path;
@@ -52,14 +55,16 @@ public class TftpServer extends Thread {
 			System.out.println("\nWelcome to local TftpServer!\n");
 
 			try {
-				InetAddress addr = InetAddress.getLocalHost();
-				TftpServer server = new TftpServer(addr);
+				InetAddress addr = InetAddress.getLocalHost();			
 
 				System.out.println("For the remote client, enter something like:");
 				System.out.println("$ java TftpClient " + addr.getHostAddress() + " cat.txt");
 
-				server.start();
-				server.join(); /* Waits for the process to be complete */
+				while (running) {
+					TftpServer server = new TftpServer(addr);
+					server.start();
+					server.join(); /* Waits for the process to be complete */
+				}			
 
 			} catch (InterruptedException e) {
 				System.out.println("InterruptedException: " + e.getMessage());
@@ -144,6 +149,9 @@ public class TftpServer extends Thread {
             	client.send(Tftp.errorPacket(msg, addr, port)); /* To TftpClient */
             	System.out.println("Transfer failed: " + msg);	/* To TftpServer */
             }
+		} catch (SocketTimeoutException e) {
+			running = false;
+			System.out.println("Timeout reached while waiting for a request.");
 		} catch (Exception e) {
          	System.out.println("Fatal Error: " + e.getMessage());
          } finally {
@@ -200,20 +208,9 @@ public class TftpServer extends Thread {
         	int toSend = arr[1] & 0xFF;   	/* Gets the int of ACK'd block */
         	int next = block + 1;    		/* Calculates the expected block */
 
-        	/*
-        	 * Checks the expected block number against actual values.
-        	 *
-        	 * Note: 	The packet's array is 0-indexed, so any attempt to
-        	 * 			access it must be done with a value less than the block
-        	 * 			number requested.
-        	 *
-        	 * 			For example, the value of toSend is the 'next' block
-        	 * 			requested by TftpClient, but will also be the index for
-        	 * 			that block in this packet array.
-        	 */
         	if (next == total) {
         		System.out.print("\t\rSent total of " + total + " packets!\r");
-        		socket.send(Tftp.ackPacket(0, addr, port));
+        		socket.send(new DatagramPacket(new byte[0], 0, addr, port));
        			return true;
         	} else if (next == toSend) {
         		System.out.print("\t\rSent " + next + "/" + total + " packets\r");

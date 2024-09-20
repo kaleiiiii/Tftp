@@ -4,7 +4,7 @@ JAVAC = javac
 JAVA = java
 OUTPUT_DIR = .
 
-CLASSES = Tftp.java TftpClient.java TftpServer.java
+CLASSES = TftpClient.java TftpServer.java
 
 all: compile
 
