@@ -47,6 +47,13 @@ Waiting for download...
 ```
 
 ## Notes
-...
 
+- EOF is signalled with an empty DatagramPacket.
+    - This is done when `next == total`
+    - `next` is the ACK'd block from TftpClient
+    - `total` is the amount of blocks for the file
 
+- TftpClient will handle multiple *consecutive* requests
+    - This is done in `main` with a while-loop
+    - The static volatile variable `running` signals end
+    - The socket timeout will trigger shut down
