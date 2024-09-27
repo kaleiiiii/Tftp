@@ -61,20 +61,29 @@ public class TftpServer extends Thread {
 				System.out.println("For the remote client, enter something like:");
 				System.out.println("$ java TftpClient <IP Address> theConcert.jpg");
 
-				System.out.println("Possible IP addresses:\n");
+				System.out.println("\nPossible commands for this machine:\n");
 
 				for (InetAddress addr : array) {
-					String cmd = "java TftpClient " + addr.getHostAddress() + " theConcert.jpg";
+					String ip = addr.getHostAddress();
+					String cmd = "java TftpClient " + ip + " theConcert.jpg";
 					System.out.println(cmd);
 				}		
 
-				int ip = 0;
+				int i = array.length - 1;
 				while (running) {
-					TftpServer server = new TftpServer(array[ip]);
-					server.start();
-					server.join(); /* Waits for the process to be complete */
-					ip++;
 
+					/* New server with another IP Address */
+					TftpServer server = new TftpServer(array[i]);
+					server.start();
+
+					/* This is a messy fix! */
+					if (i == 0) {
+						i++;
+					} else {
+						i--;
+					}
+					
+					server.join(); /* Waits for the process to be complete */
 				}			
 
 			} catch (InterruptedException e) {
