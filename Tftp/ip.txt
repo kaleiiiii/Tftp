@@ -1,0 +1,3 @@
+java TftpClient 10.24.56.188 theConcert.jpg
+java TftpClient fe80:0:0:0:186f:2354:2482:f38c%4 theConcert.jpg
+java TftpClient 2001:df0:4:1808:1401:3599:7dae:fd5f theConcert.jpg
