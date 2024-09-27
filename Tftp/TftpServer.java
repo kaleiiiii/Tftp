@@ -147,7 +147,7 @@ public class TftpServer extends Thread {
             } catch (IOException e) {
             	String msg = e.getMessage(); 	/* Gets error message to send out */
             	client.send(Tftp.errorPacket(msg, addr, port)); /* To TftpClient */
-            	System.out.println("Transfer failed: " + msg);	/* To TftpServer */
+            	System.out.println("File Not Found: " + msg);	/* To TftpServer */
             }
 		} catch (SocketTimeoutException e) {
 			running = false;

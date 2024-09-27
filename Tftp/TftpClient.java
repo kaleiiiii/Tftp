@@ -122,7 +122,7 @@ public class TftpClient extends Thread {
             	System.out.println("\nDownload failed...\n");
             }
 		} catch (IOException e) {
-         	System.out.println("IOException: " + e.getMessage());
+         	System.out.println("File Not Found" + e.getMessage());
         } catch (Exception e) {
         	System.out.println("Fatal Error: " + e.getMessage());
         } finally {
